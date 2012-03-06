@@ -1,13 +1,15 @@
 #pragma once
 
 #include "ofMain.h"
+
 #include "ofxOpenCv.h"
 
+#define _USE_LIVE_VIDEO		// uncomment this to use a live camera
+								// otherwise, we'll use a movie file
 
 class testApp : public ofBaseApp{
-	
+
 	public:
-		
 		void setup();
 		void update();
 		void draw();
@@ -21,32 +23,24 @@ class testApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);		
-        void processImage();
-    bool seedFill(int x, int y, int label );
-    
-	
-        int getPixel(int x, int y);
-        int setPixel(int x, int y, int grayValue);
-        void flipHorizontal();
-    
-		ofVideoGrabber 		vidGrabber;
-		unsigned char * 	videoGray;
-		ofTexture			videoTexture;
-		int 				camWidth;
-		int 				camHeight;
-    
-        int                 threshold;
-    
-    bool                showProcessedFeed;
-    
-    ofImage img, labelImage;
-    
-    //CV stuff
-    ofxCvColorImage			colorImg;
-    
-    ofxCvGrayscaleImage 	grayImage;
-    ofxCvGrayscaleImage 	grayBg;
-    ofxCvGrayscaleImage 	grayDiff;
-    
-    ofxCvContourFinder 	contourFinder;
+
+        #ifdef _USE_LIVE_VIDEO
+		  ofVideoGrabber 		vidGrabber;
+		#else
+		  ofVideoPlayer 		vidPlayer;
+		#endif
+
+        ofxCvColorImage			colorImg;
+
+        ofxCvGrayscaleImage 	grayImage;
+		ofxCvGrayscaleImage 	grayBg;
+		ofxCvGrayscaleImage 	grayDiff;
+
+        ofxCvContourFinder 	contourFinder;
+
+		int 				threshold;
+		bool				bLearnBakground, debug;
+
+
 };
+
