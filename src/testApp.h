@@ -1,6 +1,8 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxOpenCv.h"
+
 
 class testApp : public ofBaseApp{
 	
@@ -19,6 +21,9 @@ class testApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);		
+        void processImage();
+    bool seedFill(int x, int y, int label );
+    
 	
         int getPixel(int x, int y);
         int setPixel(int x, int y, int grayValue);
@@ -34,5 +39,14 @@ class testApp : public ofBaseApp{
     
     bool                showProcessedFeed;
     
-    ofImage img;
+    ofImage img, labelImage;
+    
+    //CV stuff
+    ofxCvColorImage			colorImg;
+    
+    ofxCvGrayscaleImage 	grayImage;
+    ofxCvGrayscaleImage 	grayBg;
+    ofxCvGrayscaleImage 	grayDiff;
+    
+    ofxCvContourFinder 	contourFinder;
 };
