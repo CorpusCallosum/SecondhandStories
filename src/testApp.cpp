@@ -20,6 +20,13 @@ void testApp::setup(){
 	threshold = 80;
     
     debug = true;
+    
+    //make the objects!!!
+    objectSet.push_back(new smObject("cube", 1000));   
+    objectSet.push_back(new smObject("rect",700)); 
+    objectSet.push_back(new smObject("triangle",200));   
+
+
 }
 
 //--------------------------------------------------------------
@@ -56,7 +63,33 @@ void testApp::update(){
 
 		// find contours which are between the size of 20 pixels and 1/3 the w*h pixels.
 		// also, find holes is set to true so we will get interior contours as well....
-		contourFinder.findContours(grayDiff, 20, (340*240)/3, 10, true);	// find holes
+		contourFinder.findContours(grayDiff, 50, (340*240)/3, 10, false);	// find holes
+
+        float areaDif = 5000;
+        
+        //try to track the objects based on their area?
+        for (int i = 0; i < contourFinder.nBlobs; i++){
+            
+            
+            for( int j=0; j<objectSet.size(); j++ )
+            {
+                
+            //compare sizes of blobs to sizes of objects
+            
+                                
+            float blobX = contourFinder.blobs[i].centroid.x;
+            float blobY = contourFinder.blobs[i].centroid.y;
+            float blobArea = contourFinder.blobs[i].area;
+                if(abs(objectSet[j]->area - blobArea) < areaDif){
+                    areaDif = abs(objectSet[j]->area - blobArea);
+                    objectSet[j]->blobID = i;   
+                }
+
+                
+            }
+        }
+
+      
 	}
 
 }
@@ -106,7 +139,22 @@ void testApp::draw(){
     }
     else{
         //THIS IS THE ACTIVE MODE
+        ofSetHexColor(0xffffff);
+
         grayDiff.draw(0,0, ofGetWidth(), ofGetHeight());
+        
+        for (int i = 0; i < objectSet.size(); i++){
+            int blobID = objectSet[i]->blobID;
+            float blobX = contourFinder.blobs[blobID].centroid.x;
+            float blobY = contourFinder.blobs[blobID].centroid.y;
+            //print id
+           // char reportStr[1024];
+          //  sprintf(reportStr, "%f", objectSet[i]->name);
+            float xRatio = ofGetWidth()/320;
+            float yRatio = ofGetHeight()/240;
+            ofSetHexColor(0xff0000);
+            ofDrawBitmapString(objectSet[i]->name, blobX*xRatio, blobY*yRatio);
+        }
     }
 
 }
