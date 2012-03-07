@@ -4,6 +4,7 @@
 
 #include "ofxOpenCv.h"
 #include "smObject.h"
+#include "ofxBlurShader.h"
 
 
 #define _USE_LIVE_VIDEO		// uncomment this to use a live camera
@@ -50,6 +51,9 @@ class testApp : public ofBaseApp{
     
     //add a vector of objects here
         std::vector< smObject* >    objectSet;
+    
+    ofxBlurShader blur;
+
 
 };
 

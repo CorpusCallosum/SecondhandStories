@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0b2e55fee13134ce9b57d3bffd6d5dab /* ofxCvShortImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8a4dd23693dfab8ec05faa5d62c49d8c /* ofxCvShortImage.cpp */; };
 		134078e8f8f4f24368b31f26166fec03 /* ofxCvGrayscaleImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 057122a817d12571f8c0c7a4d522b879 /* ofxCvGrayscaleImage.cpp */; };
+		23D81459150801D6003C8EA8 /* ofxBlurShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23D81456150801D6003C8EA8 /* ofxBlurShader.cpp */; };
 		23FED1541505B8240013149D /* smObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23FED1521505B8240013149D /* smObject.cpp */; };
 		259da76c028adaa20996723e102a6ccd /* ofxCvColorImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ce9c7160245b19131dae61282ee6cb53 /* ofxCvColorImage.cpp */; };
 		7829c785a0dd56718cb46bcc3b066ff1 /* ofxCvHaarFinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9a16cbf2e8cfe43af54fe6f55efbf8a4 /* ofxCvHaarFinder.cpp */; };
@@ -66,6 +67,9 @@
 
 /* Begin PBXFileReference section */
 		057122a817d12571f8c0c7a4d522b879 /* ofxCvGrayscaleImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ofxCvGrayscaleImage.cpp; path = ../../../addons/ofxOpenCv/src/ofxCvGrayscaleImage.cpp; sourceTree = SOURCE_ROOT; };
+		23D81456150801D6003C8EA8 /* ofxBlurShader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxBlurShader.cpp; sourceTree = "<group>"; };
+		23D81457150801D6003C8EA8 /* ofxBlurShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxBlurShader.h; sourceTree = "<group>"; };
+		23D81458150801D6003C8EA8 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		23FED1521505B8240013149D /* smObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = smObject.cpp; sourceTree = "<group>"; };
 		23FED1531505B8240013149D /* smObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = smObject.h; sourceTree = "<group>"; };
 		3c232045833313b99efe0b14840b6108 /* ofxCvMain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofxCvMain.h; path = ../../../addons/ofxOpenCv/src/ofxCvMain.h; sourceTree = SOURCE_ROOT; };
@@ -133,9 +137,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		23D81455150801D6003C8EA8 /* ofxBlurShader */ = {
+			isa = PBXGroup;
+			children = (
+				23D81456150801D6003C8EA8 /* ofxBlurShader.cpp */,
+				23D81457150801D6003C8EA8 /* ofxBlurShader.h */,
+				23D81458150801D6003C8EA8 /* README */,
+			);
+			name = ofxBlurShader;
+			path = ../../../addons/ofxBlurShader;
+			sourceTree = "<group>";
+		};
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
+				23D81455150801D6003C8EA8 /* ofxBlurShader */,
 				d25ed262554e8f281794adead3c706ad /* ofxOpenCv */,
 			);
 			name = addons;
@@ -346,6 +362,7 @@
 				7829c785a0dd56718cb46bcc3b066ff1 /* ofxCvHaarFinder.cpp in Sources */,
 				0b2e55fee13134ce9b57d3bffd6d5dab /* ofxCvShortImage.cpp in Sources */,
 				23FED1541505B8240013149D /* smObject.cpp in Sources */,
+				23D81459150801D6003C8EA8 /* ofxBlurShader.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

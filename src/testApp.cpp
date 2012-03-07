@@ -53,9 +53,11 @@ void testApp::setup(){
     //DEFINE THE FONTS
     //ofTrueTypeFont::setGlobalDpi(72);
     
-	titleFont.loadFont("verdana.ttf", 20);//, true, true);
+	titleFont.loadFont("din.ttf", 20, true, true);
 	//titleFont.setLineHeight(34.0f);
 	//titleFont.setLetterSpacing(1.035);
+
+    blur.setup(ofGetWidth(),ofGetHeight());
 
 
 }
@@ -248,28 +250,55 @@ void testApp::draw(){
 }
 
 void testApp::drawObjects(){
+    
+    //apply blur
+    blur.begin();
+    
+
+    blur.amount = 4;//ofMap(mouseX,0,ofGetWidth(),0,10,true);
+    blur.iterations = 4;//ofMap(mouseY,0,ofGetHeight(),1,10,true);
+
+    ofFill();
+    ofSetColor(0);
+   // ofRect(0, 0, ofGetWidth()*2, ofGetHeight()*2);
+    ofClear(0,255);
+    
     for (int i = 0; i < objectSet.size(); i++){
-        if( objectSet[i]->lifted){
+        if( objectSet[i]->lifted){            
             objectSet[i]->draw(0,0);
+            ofSetHexColor(0x000000);
+        }
+    }
+    
+    blur.end();
+   // ofDrawBitmapString("amount: " + ofToString(blur.amount), 10,15);
+   // ofDrawBitmapString("iterations: " + ofToString(blur.iterations), 10,25);
+
+    for (int i = 0; i < objectSet.size(); i++){
+        if( objectSet[i]->lifted){            
+            //draw text
             ofSetHexColor(0x000000);
             titleFont.drawString(objectSet[i]->name, objectSet[i]->x-titleFont.stringWidth(objectSet[i]->name)/2, objectSet[i]->y);
         }
         
         if(debug){
             //DISPLAY TEXT
-                int blobID = objectSet[i]->blobID;
-                float blobX = objectSet[i]->x;
-                float blobY = objectSet[i]->y;
-                //print id
-                // char reportStr[1024];
-                //  sprintf(reportStr, "%f", objectSet[i]->name);
-                float xRatio = ofGetWidth()/320;
-                float yRatio = ofGetHeight()/240;
-                ofSetHexColor(0xff0000);
-                ofDrawBitmapString(objectSet[i]->name, blobX*xRatio+objectSet[i]->rect.width*2, blobY*yRatio+objectSet[i]->rect.height*2); 
-    }
+            int blobID = objectSet[i]->blobID;
+            float blobX = objectSet[i]->x;
+            float blobY = objectSet[i]->y;
+            //print id
+            // char reportStr[1024];
+            //  sprintf(reportStr, "%f", objectSet[i]->name);
+            float xRatio = ofGetWidth()/320;
+            float yRatio = ofGetHeight()/240;
+            ofSetHexColor(0xff0000);
+            ofDrawBitmapString(objectSet[i]->name, blobX*xRatio+objectSet[i]->rect.width*2, blobY*yRatio+objectSet[i]->rect.height*2); 
         }
-        
+    }
+
+
+    
+
 
 }
 
