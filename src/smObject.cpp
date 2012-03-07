@@ -18,7 +18,7 @@ smObject::smObject( std::string _NAME, int _AREA, std::string _soundFile)
     xScale = 1;
     yScale = 1;
     
-    found = false;
+    found = lifted = false;
     nPts  = 0;
     story.loadSound(_soundFile);
     
@@ -33,15 +33,52 @@ smObject::smObject( std::string _NAME, int _AREA, std::string _soundFile)
 
 }
 
-/*void smObject::draw(float x, float y){
-    ofNoFill();
-    ofSetHexColor(0x00FFFF);
-    ofBeginShape();
-    //draw the outline of the object
-    for (int i = 0; i < nPts; i++){
-        ofVertex(x + pts[i].x, y + pts[i].y);
+
+void smObject::setTrackedArea(int _area){
+    
+    if(areas.size() >= 20){
+        //remove first element
+        areas.erase(areas.begin());
     }
-    ofEndShape(true);
-    ofSetHexColor(0xff0099);
-   // ofRect(x + boundingRect.x, y + boundingRect.y, boundingRect.width, boundingRect.height);
-}*/
+    
+    areas.push_back(_area);
+    
+    //average all areas
+    int areaSum = 0;
+    for(int i=0;i<areas.size();i++){
+        areaSum+=areas[i];
+    }
+    
+    smoothedTrackedArea = areaSum/areas.size();
+    
+    //check for change in area
+    if(abs(_area - smoothedTrackedArea) > area*.05){
+        //OBJECT HAS BEEN LIFTED!
+        lifted = true;
+        
+        story.play();
+        
+    }
+    
+}
+
+void smObject::isFound(){
+    story.stop();
+    
+    found = true;
+    lifted = false;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

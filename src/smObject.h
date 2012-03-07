@@ -27,30 +27,41 @@ public:
     std::string     name;
     int             blobID, x, y, width, height;
     ofRectangle     rect;
-    bool            found;
+    bool            found, lifted;
     float           xScale, yScale;
     
-    vector <ofPoint>    pts;    // the contour of the blob
-    int                 nPts;   // number of pts;
+    vector <ofPoint>    pts;        // the contour of the blob
+    int                 nPts;       // number of pts;
     int                 blobArea;
+    vector <int>        areas;      //
+    float               smoothedTrackedArea;
 
     
     //soundFile
-    
-    ofSoundPlayer story;
-    std::string  soundFile;
+    ofSoundPlayer       story;
+    std::string         soundFile;
     float 				* fftSmoothed;
-    int nBandsToGet;
+    int                 nBandsToGet;
     
-    
-    
-    
+    //METHODS
+    void setTrackedArea(int _area);
+    void isFound();
     
     
     void draw(float x=0, float y=0){
-    //    ofNoFill();
         ofFill();
-        ofSetHexColor(0xfdce66);
+        if(lifted){
+            //BRIGHTER
+            ofSetHexColor(0xfdce66);
+           // ofSetColor(100*fftSmoothed[3]);
+        }
+        else{
+            //DARKER
+           // ofSetHexColor(0x6d592e);
+            ofSetHexColor(0x000000);
+            
+
+        }
         ofBeginShape();
         //draw the outline of the object
            
@@ -72,8 +83,6 @@ public:
             ofVertex(pX, pY);
         }
         ofEndShape(true);
-        ofSetHexColor(0xff0099);
-        // ofRect(x + boundingRect.x, y + boundingRect.y, boundingRect.width, boundingRect.height);
     }
 
 };

@@ -112,7 +112,8 @@ void testApp::update(){
                 if(abs(objectSet[j]->area - blobArea) < areaDif){
                     int at = objectSet[j]->area*areaThreshold;
                     if(abs(objectSet[j]->area - blobArea) < at){
-                         objectSet[j]->found = true;
+                        objectSet[j]->isFound();
+                        // objectSet[j]->found = true;
                         areaDif = abs(objectSet[j]->area - blobArea);
                         objectSet[j]->blobID = i;
                         objectSet[j]->x = blobX;
@@ -123,6 +124,10 @@ void testApp::update(){
                         //get the outline
                         objectSet[j]->pts = blobs[i].pts;
                         objectSet[j]->nPts = blobs[i].nPts;
+                        
+                        //set blob area
+                        objectSet[j]->setTrackedArea(blobArea);
+
                          
                         //remove blob from array
                         blobs.erase(blobs.begin()+i);
@@ -234,8 +239,10 @@ void testApp::draw(){
 
 void testApp::drawObjects(){
     for (int i = 0; i < objectSet.size(); i++){
-        if(  objectSet[i]->found){
             objectSet[i]->draw(0,0);
+            
+        if(debug){
+            //DISPLAY TEXT
                 int blobID = objectSet[i]->blobID;
                 float blobX = objectSet[i]->x;
                 float blobY = objectSet[i]->y;
@@ -245,26 +252,11 @@ void testApp::drawObjects(){
                 float xRatio = ofGetWidth()/320;
                 float yRatio = ofGetHeight()/240;
                 ofSetHexColor(0xff0000);
-                ofDrawBitmapString(objectSet[i]->name, blobX*xRatio+objectSet[i]->rect.width*3, blobY*yRatio+objectSet[i]->rect.height*3);   
+                ofDrawBitmapString(objectSet[i]->name, blobX*xRatio+objectSet[i]->rect.width*2, blobY*yRatio+objectSet[i]->rect.height*2); 
+    }
         }
         
-    }
 
-}
-
-void testApp::captureOutlines(){
-   /* for (int i = 0; i < objectSet.size(); i++){
-        int blobID = objectSet[i]->blobID;
-        float blobX = contourFinder.blobs[blobID].centroid.x;
-        float blobY = contourFinder.blobs[blobID].centroid.y;
-        //print id
-        // char reportStr[1024];
-        //  sprintf(reportStr, "%f", objectSet[i]->name);
-        float xRatio = ofGetWidth()/320;
-        float yRatio = ofGetHeight()/240;
-        ofSetHexColor(0xff0000);
-        ofDrawBitmapString(objectSet[i]->name, blobX*xRatio+objectSet[i]->rect.width*2, blobY*yRatio+objectSet[i]->rect.height*2);
-    }*/
 }
 
 //--------------------------------------------------------------
@@ -289,10 +281,6 @@ void testApp::keyPressed(int key){
 void testApp::keyReleased(int key){
     if(key == 'd'){
         debug = !debug;
-    }
-    else if(key == 'c'){
-        //capture object outlines, do this when all the object are on the table and correctly ided?
-        captureOutlines();
     }
     else if(key == 'f'){
         //enter active mode!
