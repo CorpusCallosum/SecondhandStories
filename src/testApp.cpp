@@ -101,7 +101,7 @@ void testApp::update(){
         
         for( int j=0; j<objectSet.size(); j++ )
         {
-            objectSet[j]->found = false;
+            objectSet[j]->isFound(false);
         }
         
         
@@ -122,7 +122,7 @@ void testApp::update(){
                 if(abs(objectSet[j]->area - blobArea) < areaDif){
                     int at = objectSet[j]->area*areaThreshold;
                     if(abs(objectSet[j]->area - blobArea) < at){
-                        objectSet[j]->isFound();
+                        objectSet[j]->isFound(true);
                         // objectSet[j]->found = true;
                         areaDif = abs(objectSet[j]->area - blobArea);
                         objectSet[j]->blobID = i;
@@ -264,16 +264,16 @@ void testApp::drawObjects(){
     ofClear(0,255);
     
     for (int i = 0; i < objectSet.size(); i++){
-        if( objectSet[i]->lifted){            
+       // if( objectSet[i]->lifted){            
             objectSet[i]->draw(0,0);
-            ofSetHexColor(0x000000);
-        }
+          //  ofSetHexColor(0x000000);
+        //}
     }
     
     blur.end();
    // ofDrawBitmapString("amount: " + ofToString(blur.amount), 10,15);
    // ofDrawBitmapString("iterations: " + ofToString(blur.iterations), 10,25);
-
+//DRAW TEXT
     for (int i = 0; i < objectSet.size(); i++){
         if( objectSet[i]->lifted){            
             //draw text

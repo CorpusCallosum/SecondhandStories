@@ -39,7 +39,12 @@ smObject::smObject( std::string _NAME, int _AREA, std::string _soundFile)
 	titleFont.loadFont("verdana.ttf", 30, true, true);
 	titleFont.setLineHeight(34.0f);
 	titleFont.setLetterSpacing(1.035);
-
+    
+    //define colors
+    offColor = ofColor (0,0,0);   
+    onColor = ofColor (251,198,94);
+    lerpTarget = 0;
+    lerpAmt = 0;
 }
 
 
@@ -71,11 +76,16 @@ void smObject::setTrackedArea(int _area){
     
 }
 
-void smObject::isFound(){
+void smObject::isFound(bool b){
     story.stop();
     
-    found = true;
-    lifted = false;
+    found = b;
+    lifted = !b;
+    
+    if(b)
+        lerpTarget = 0;
+    else
+        lerpTarget = 1;
 }
 
 void smObject::setX(int _x){

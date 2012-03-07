@@ -46,27 +46,50 @@ public:
     ofTrueTypeFont      titleFont;
     ofTrueTypeFont      subTitleFont;
     
+    ofColor             offColor;
+    ofColor             onColor;
+    ofColor             targetColor;
+    
+    float lerpAmt, lerpTarget;
+    
     //METHODS
     void setTrackedArea(int _area);
-    void isFound();
+    void isFound(bool b);
     void setX(int _x);
     void setY(int _y);
     
     
     void draw(float x=0, float y=0){
         ofFill();
-        if(lifted){
+      /*  if(lifted){
+            lerpTarget = 1;
             //BRIGHTER
-            ofSetHexColor(0xfdce66);
+           // ofSetHexColor(0xfdce66);
            // ofSetColor(100*fftSmoothed[3]);
         }
         else{
             //DARKER
            // ofSetHexColor(0x6d592e);
-            ofSetHexColor(0x000000);
-            
+           // ofSetHexColor(0x000000);
+            lerpTarget = 0;
+
+        }*/
+        
+        //color lerp
+        if(!found){
+            //fade glow in
+            lerpAmt += (1 - lerpAmt)/200;
+        }
+        else{
+            //fade glow out
+            lerpAmt += (0 - lerpAmt)/200;
 
         }
+        printf("lerp amt: %f",lerpAmt);
+        targetColor = offColor.lerp(onColor, lerpAmt);
+        ofSetColor(targetColor);
+
+        
         ofBeginShape();
         //draw the outline of the object
            
