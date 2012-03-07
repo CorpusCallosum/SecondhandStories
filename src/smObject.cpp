@@ -9,7 +9,7 @@
 #include <iostream>
 #include "smObject.h"
 
-smObject::smObject( std::string _NAME, int _AREA)
+smObject::smObject( std::string _NAME, int _AREA, std::string _soundFile)
 {
     
     name = _NAME;
@@ -20,6 +20,16 @@ smObject::smObject( std::string _NAME, int _AREA)
     
     found = false;
     nPts  = 0;
+    story.loadSound(_soundFile);
+    
+    fftSmoothed = new float[8192];
+	for (int i = 0; i < 8192; i++){
+		fftSmoothed[i] = 0;
+	}
+	
+	nBandsToGet = 128;
+    
+    
 
 }
 

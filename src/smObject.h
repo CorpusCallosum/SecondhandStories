@@ -21,7 +21,7 @@ public:
     
    // void draw(float x, float y);
     
-    smObject( std::string _NAME, int _AREA);
+    smObject( std::string _NAME, int _AREA, std::string _soundFile);
         
     int             area;
     std::string     name;
@@ -34,7 +34,19 @@ public:
     int                 nPts;   // number of pts;
     int                 blobArea;
 
-        
+    
+    //soundFile
+    
+    ofSoundPlayer story;
+    std::string  soundFile;
+    float 				* fftSmoothed;
+    int nBandsToGet;
+    
+    
+    
+    
+    
+    
     void draw(float x=0, float y=0){
     //    ofNoFill();
         ofFill();

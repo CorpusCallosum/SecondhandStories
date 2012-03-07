@@ -26,12 +26,12 @@ void testApp::setup(){
     fs = false;
     
     //make the objects!!!
-    objectSet.push_back(new smObject("Record",5000));
+    objectSet.push_back(new smObject("Record",5000, "reed.mp3"));
 
    // objectSet.push_back(new smObject("rect",700)); 
    // objectSet.push_back(new smObject("triangle",200));
-    objectSet.push_back(new smObject("Photo",2500));
-    objectSet.push_back(new smObject("China", 300));   
+    objectSet.push_back(new smObject("Photo",2500, "reed.mp3"));
+    objectSet.push_back(new smObject("China", 300, "reed.mp3"));   
 
     
     float xScale = ofGetWidth()/camWidth;
@@ -132,6 +132,22 @@ void testApp::update(){
                 }
             }
            }
+            
+            // (5) grab the fft, and put in into a "smoothed" array,
+            //		by taking maximums, as peaks and then smoothing downward
+            float * val = ofSoundGetSpectrum( objectSet[j]->nBandsToGet);		// request 128 values for fft
+            for (int i = 0;i <  objectSet[j]->nBandsToGet; i++){
+                
+                // let the smoothed calue sink to zero:
+                 objectSet[j]->fftSmoothed[i] *= 0.96f;
+                
+                // take the max, either the smoothed or the incoming:
+                if ( objectSet[j]->fftSmoothed[i] < val[i])  objectSet[j]->fftSmoothed[i] = val[i];
+                
+            }
+            
+            
+            
         }
 
       
