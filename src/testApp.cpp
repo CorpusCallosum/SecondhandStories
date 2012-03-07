@@ -49,6 +49,14 @@ void testApp::setup(){
         objectSet[j]->xScale = 3.8;
         objectSet[j]->yScale = 3.8;
     };
+    
+    //DEFINE THE FONTS
+    //ofTrueTypeFont::setGlobalDpi(72);
+    
+	titleFont.loadFont("verdana.ttf", 20);//, true, true);
+	//titleFont.setLineHeight(34.0f);
+	//titleFont.setLetterSpacing(1.035);
+
 
 }
 
@@ -116,8 +124,8 @@ void testApp::update(){
                         // objectSet[j]->found = true;
                         areaDif = abs(objectSet[j]->area - blobArea);
                         objectSet[j]->blobID = i;
-                        objectSet[j]->x = blobX;
-                        objectSet[j]->y = blobY;
+                        objectSet[j]->setX(blobX);
+                        objectSet[j]->setY(blobY);
                         objectSet[j]->rect = blobs[i].boundingRect;
                         objectSet[j]->width = blobs[i].boundingRect.width;
                         objectSet[j]->height = blobs[i].boundingRect.height;
@@ -162,6 +170,7 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
+    
 
     if(!fs){
     //THIS IS THE DEBUG MODE
@@ -235,12 +244,17 @@ void testApp::draw(){
         
     }
 
+
 }
 
 void testApp::drawObjects(){
     for (int i = 0; i < objectSet.size(); i++){
+        if( objectSet[i]->lifted){
             objectSet[i]->draw(0,0);
-            
+            ofSetHexColor(0x000000);
+            titleFont.drawString(objectSet[i]->name, objectSet[i]->x-titleFont.stringWidth(objectSet[i]->name)/2, objectSet[i]->y);
+        }
+        
         if(debug){
             //DISPLAY TEXT
                 int blobID = objectSet[i]->blobID;

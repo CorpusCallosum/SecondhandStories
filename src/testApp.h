@@ -44,6 +44,10 @@ class testApp : public ofBaseApp{
     
         float               areaThreshold;
     
+    //fonts
+    ofTrueTypeFont      titleFont;
+
+    
     //add a vector of objects here
         std::vector< smObject* >    objectSet;
 

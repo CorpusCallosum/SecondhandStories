@@ -29,7 +29,16 @@ smObject::smObject( std::string _NAME, int _AREA, std::string _soundFile)
 	
 	nBandsToGet = 128;
     
+    //DEFINE THE FONTS
+    ofTrueTypeFont::setGlobalDpi(72);
     
+	subTitleFont.loadFont("verdana.ttf", 14, true, true);
+	subTitleFont.setLineHeight(18.0f);
+	subTitleFont.setLetterSpacing(1.037);
+    
+	titleFont.loadFont("verdana.ttf", 30, true, true);
+	titleFont.setLineHeight(34.0f);
+	titleFont.setLetterSpacing(1.035);
 
 }
 
@@ -69,10 +78,13 @@ void smObject::isFound(){
     lifted = false;
 }
 
+void smObject::setX(int _x){
+    x = _x*xScale;
+}
 
-
-
-
+void smObject::setY(int _y){
+    y = _y*yScale;
+}
 
 
 

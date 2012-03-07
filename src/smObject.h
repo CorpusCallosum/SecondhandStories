@@ -43,9 +43,14 @@ public:
     float 				* fftSmoothed;
     int                 nBandsToGet;
     
+    ofTrueTypeFont      titleFont;
+    ofTrueTypeFont      subTitleFont;
+    
     //METHODS
     void setTrackedArea(int _area);
     void isFound();
+    void setX(int _x);
+    void setY(int _y);
     
     
     void draw(float x=0, float y=0){
@@ -68,8 +73,6 @@ public:
         float sX = x;//*xScale;
         float sY = y;//*yScale;
         
-        
-        
         for (int i = 0; i < nPts; i++){
             
             float pX = pts[i].x * xScale;
@@ -83,6 +86,14 @@ public:
             ofVertex(pX, pY);
         }
         ofEndShape(true);
+        
+        //Draw text
+        ofSetHexColor(0xffffff);
+        titleFont.drawString(name, 0, 0);
+
+       // titleFont.drawString(name, x-titleFont.stringWidth(name)/2, y);
+       // subTitleFont.drawString(name, x, y);
+
     }
 
 };
