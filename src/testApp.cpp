@@ -3,53 +3,69 @@
 //--------------------------------------------------------------
 void testApp::setup(){
 
-	#ifdef _USE_LIVE_VIDEO
-        vidGrabber.setVerbose(true);
-        vidGrabber.initGrabber(320,240);
-	#else
-        vidPlayer.loadMovie("fingers.mov");
-        vidPlayer.play();
-	#endif
+    camWidth = 320;
+    camHeight = 240;
+    
+    vidGrabber.setVerbose(true);
+    vidGrabber.initGrabber(320,240);
+	
 
     colorImg.allocate(320,240);
 	grayImage.allocate(320,240);
 	grayBg.allocate(320,240);
 	grayDiff.allocate(320,240);
+    grayThresh.allocate(320,240);
 
+    
 	bLearnBakground = true;
-	threshold = 80;
+	threshold = 40;
+
+    areaThreshold = .4;
     
     debug = true;
+    fs = false;
     
     //make the objects!!!
-    objectSet.push_back(new smObject("cube", 1000));   
-    objectSet.push_back(new smObject("rect",700)); 
-    objectSet.push_back(new smObject("triangle",200));   
+    objectSet.push_back(new smObject("Record",5000));
 
+   // objectSet.push_back(new smObject("rect",700)); 
+   // objectSet.push_back(new smObject("triangle",200));
+    objectSet.push_back(new smObject("Photo",2500));
+    objectSet.push_back(new smObject("China", 300));   
+
+    
+    float xScale = ofGetWidth()/camWidth;
+    float yScale = ofGetHeight()/camHeight;
+    
+   // printf("ofGetHeight: %f", ofGetHeight());
+ //   printf("camHeight: %d", camHeight); 
+    
+    printf("xScale: %f", xScale);
+    printf("yScale: %f", yScale);
+
+    
+    for( int j=0; j<objectSet.size(); j++ )
+    {
+        objectSet[j]->xScale = 3.8;
+        objectSet[j]->yScale = 3.8;
+    };
 
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
-	ofBackground(100,100,100);
+	//ofBackground(100,100,100);
 
     bool bNewFrame = false;
 
-	#ifdef _USE_LIVE_VIDEO
        vidGrabber.grabFrame();
 	   bNewFrame = vidGrabber.isFrameNew();
-    #else
-        vidPlayer.idleMovie();
-        bNewFrame = vidPlayer.isFrameNew();
-	#endif
+   
 
 	if (bNewFrame){
 
-		#ifdef _USE_LIVE_VIDEO
             colorImg.setFromPixels(vidGrabber.getPixels(), 320,240);
-	    #else
-            colorImg.setFromPixels(vidPlayer.getPixels(), 320,240);
-        #endif
+	   
 
         grayImage = colorImg;
 		if (bLearnBakground == true){
@@ -59,34 +75,63 @@ void testApp::update(){
 
 		// take the abs value of the difference between background and incoming and then threshold:
 		grayDiff.absDiff(grayBg, grayImage);
-		grayDiff.threshold(threshold);
+        grayThresh = grayDiff;
+        grayThresh.threshold(threshold);
+        grayThresh.mirror(false, true);
+
 
 		// find contours which are between the size of 20 pixels and 1/3 the w*h pixels.
 		// also, find holes is set to true so we will get interior contours as well....
-		contourFinder.findContours(grayDiff, 50, (340*240)/3, 10, false);	// find holes
+		contourFinder.findContours(grayThresh, 50, (340*240)/3, 10, false);	// find holes
 
-        float areaDif = 5000;
+        float areaDif = camHeight*camWidth;
         
         //try to track the objects based on their area?
-        for (int i = 0; i < contourFinder.nBlobs; i++){
-            
-            
-            for( int j=0; j<objectSet.size(); j++ )
-            {
-                
-            //compare sizes of blobs to sizes of objects
-            
-                                
-            float blobX = contourFinder.blobs[i].centroid.x;
-            float blobY = contourFinder.blobs[i].centroid.y;
-            float blobArea = contourFinder.blobs[i].area;
-                if(abs(objectSet[j]->area - blobArea) < areaDif){
-                    areaDif = abs(objectSet[j]->area - blobArea);
-                    objectSet[j]->blobID = i;   
-                }
+        //reset object associations
+        
+        for( int j=0; j<objectSet.size(); j++ )
+        {
+            objectSet[j]->found = false;
+        }
+        
+        
+        //copy blobs from contour finder
+        vector<ofxCvBlob>  blobs = contourFinder.blobs;
 
-                
+        
+        
+        for( int j=0; j<objectSet.size(); j++ )
+        {
+           for (int i = 0; i < blobs.size(); i++){
+                      
+            //compare sizes of blobs to sizes of objects
+            if(!objectSet[j]->found){
+                float blobX = blobs[i].centroid.x;
+                float blobY = blobs[i].centroid.y;
+                float blobArea = blobs[i].area;
+                if(abs(objectSet[j]->area - blobArea) < areaDif){
+                    int at = objectSet[j]->area*areaThreshold;
+                    if(abs(objectSet[j]->area - blobArea) < at){
+                         objectSet[j]->found = true;
+                        areaDif = abs(objectSet[j]->area - blobArea);
+                        objectSet[j]->blobID = i;
+                        objectSet[j]->x = blobX;
+                        objectSet[j]->y = blobY;
+                        objectSet[j]->rect = blobs[i].boundingRect;
+                        objectSet[j]->width = blobs[i].boundingRect.width;
+                        objectSet[j]->height = blobs[i].boundingRect.height;
+                        //get the outline
+                        objectSet[j]->pts = blobs[i].pts;
+                        objectSet[j]->nPts = blobs[i].nPts;
+                         
+                        //remove blob from array
+                        blobs.erase(blobs.begin()+i);
+                        i=0;
+                            
+                     }
+                }
             }
+           }
         }
 
       
@@ -97,6 +142,7 @@ void testApp::update(){
 //--------------------------------------------------------------
 void testApp::draw(){
 
+    if(!fs){
     //THIS IS THE DEBUG MODE
     if(debug){
 	// draw the incoming, the grayscale, the bg and the thresholded difference
@@ -105,7 +151,9 @@ void testApp::draw(){
 	grayImage.draw(360,20);
 	grayBg.draw(20,280);
 	grayDiff.draw(360,280);
+    grayThresh.draw(360+360,280);
 
+        
 	// then draw the contours:
 
 	ofFill();
@@ -138,25 +186,69 @@ void testApp::draw(){
 	ofDrawBitmapString(reportStr, 20, 600);
     }
     else{
-        //THIS IS THE ACTIVE MODE
         ofSetHexColor(0xffffff);
 
-        grayDiff.draw(0,0, ofGetWidth(), ofGetHeight());
+        grayThresh.draw(0,0, ofGetWidth(), ofGetHeight());
         
         for (int i = 0; i < objectSet.size(); i++){
+            if(objectSet[i]->found){
             int blobID = objectSet[i]->blobID;
-            float blobX = contourFinder.blobs[blobID].centroid.x;
-            float blobY = contourFinder.blobs[blobID].centroid.y;
+            float blobX = objectSet[i]->x;
+            float blobY = objectSet[i]->y;
             //print id
            // char reportStr[1024];
           //  sprintf(reportStr, "%f", objectSet[i]->name);
             float xRatio = ofGetWidth()/320;
             float yRatio = ofGetHeight()/240;
             ofSetHexColor(0xff0000);
-            ofDrawBitmapString(objectSet[i]->name, blobX*xRatio, blobY*yRatio);
+            ofDrawBitmapString(objectSet[i]->name, blobX*xRatio+objectSet[i]->rect.width*3, blobY*yRatio+objectSet[i]->rect.height*3);
+        }
         }
     }
+    }
+    else{
+        ofBackground(0,0,0);
+        //THIS is the active mode!
+        drawObjects();
+        
+        
+    }
 
+}
+
+void testApp::drawObjects(){
+    for (int i = 0; i < objectSet.size(); i++){
+        if(  objectSet[i]->found){
+            objectSet[i]->draw(0,0);
+                int blobID = objectSet[i]->blobID;
+                float blobX = objectSet[i]->x;
+                float blobY = objectSet[i]->y;
+                //print id
+                // char reportStr[1024];
+                //  sprintf(reportStr, "%f", objectSet[i]->name);
+                float xRatio = ofGetWidth()/320;
+                float yRatio = ofGetHeight()/240;
+                ofSetHexColor(0xff0000);
+                ofDrawBitmapString(objectSet[i]->name, blobX*xRatio+objectSet[i]->rect.width*3, blobY*yRatio+objectSet[i]->rect.height*3);   
+        }
+        
+    }
+
+}
+
+void testApp::captureOutlines(){
+   /* for (int i = 0; i < objectSet.size(); i++){
+        int blobID = objectSet[i]->blobID;
+        float blobX = contourFinder.blobs[blobID].centroid.x;
+        float blobY = contourFinder.blobs[blobID].centroid.y;
+        //print id
+        // char reportStr[1024];
+        //  sprintf(reportStr, "%f", objectSet[i]->name);
+        float xRatio = ofGetWidth()/320;
+        float yRatio = ofGetHeight()/240;
+        ofSetHexColor(0xff0000);
+        ofDrawBitmapString(objectSet[i]->name, blobX*xRatio+objectSet[i]->rect.width*2, blobY*yRatio+objectSet[i]->rect.height*2);
+    }*/
 }
 
 //--------------------------------------------------------------
@@ -182,6 +274,15 @@ void testApp::keyReleased(int key){
     if(key == 'd'){
         debug = !debug;
     }
+    else if(key == 'c'){
+        //capture object outlines, do this when all the object are on the table and correctly ided?
+        captureOutlines();
+    }
+    else if(key == 'f'){
+        //enter active mode!
+        fs = !fs;
+    }
+    
 }
 
 //--------------------------------------------------------------

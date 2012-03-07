@@ -24,27 +24,28 @@ class testApp : public ofBaseApp{
 		void mouseReleased(int x, int y, int button);
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
-		void gotMessage(ofMessage msg);		
+		void gotMessage(ofMessage msg);
+        void captureOutlines();
+        void drawObjects();
 
-        #ifdef _USE_LIVE_VIDEO
+    
 		  ofVideoGrabber 		vidGrabber;
-		#else
-		  ofVideoPlayer 		vidPlayer;
-		#endif
-
+		
         ofxCvColorImage			colorImg;
 
         ofxCvGrayscaleImage 	grayImage;
 		ofxCvGrayscaleImage 	grayBg;
-		ofxCvGrayscaleImage 	grayDiff;
+		ofxCvGrayscaleImage 	grayDiff, grayThresh;
 
         ofxCvContourFinder 	contourFinder;
 
-		int 				threshold;
-		bool				bLearnBakground, debug;
+		int 				threshold, camWidth, camHeight;
+		bool				bLearnBakground, debug, fs;
+    
+        float               areaThreshold;
     
     //add a vector of objects here
-    std::vector< smObject* >    objectSet;
+        std::vector< smObject* >    objectSet;
 
 };
 
