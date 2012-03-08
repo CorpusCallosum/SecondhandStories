@@ -3,6 +3,9 @@
 //--------------------------------------------------------------
 void testApp::setup(){
 
+    
+    ofHideCursor();
+    
     camWidth = 320;
     camHeight = 240;
     
@@ -18,7 +21,7 @@ void testApp::setup(){
 
     
 	bLearnBakground = true;
-	threshold = 40;
+	threshold = 34;
 
     areaThreshold = .4;
     
@@ -31,7 +34,9 @@ void testApp::setup(){
    // objectSet.push_back(new smObject("rect",700)); 
    // objectSet.push_back(new smObject("triangle",200));
     objectSet.push_back(new smObject("Merche",2500, "merche.mp3"));
-    objectSet.push_back(new smObject("Gabby", 260, "reed.mp3"));   
+    objectSet.push_back(new smObject("Spike", 1500, "reed.mp3"));   
+
+    objectSet.push_back(new smObject("Gabby", 300, "pitcher.mp3"));
 
     
     float xScale = ofGetWidth()/camWidth;
@@ -155,7 +160,7 @@ void testApp::update(){
             for (int i = 0;i <  objectSet[j]->nBandsToGet; i++){
                 
                 // map input to alpha value for on color
-                objectSet[j]->onAlpha = ofMap(val[2], 0, .6, 60, 255); 
+                objectSet[j]->onAlpha = ofMap(val[2], 0, .8, 150, 255); 
                 
                 
                 //printf("fftval: %f\n", val[2]);
@@ -284,7 +289,7 @@ void testApp::drawObjects(){
             titleFont.drawString(objectSet[i]->name, objectSet[i]->x-titleFont.stringWidth(objectSet[i]->name)/2, objectSet[i]->y);
         }
         
-        if(debug){
+      /*  if(debug){
             //DISPLAY TEXT
             int blobID = objectSet[i]->blobID;
             float blobX = objectSet[i]->x;
@@ -296,7 +301,7 @@ void testApp::drawObjects(){
             float yRatio = ofGetHeight()/240;
             ofSetHexColor(0xff0000);
             ofDrawBitmapString(objectSet[i]->name, blobX*xRatio+objectSet[i]->rect.width*2, blobY*yRatio+objectSet[i]->rect.height*2); 
-        }
+        }*/
     }
 
 

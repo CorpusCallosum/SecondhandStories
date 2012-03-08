@@ -64,34 +64,26 @@ public:
         ofFill();
         if(lifted){
             lerpTarget = 1;//onAlpha/255;
-            //BRIGHTER
-           // ofSetHexColor(0xfdce66);
-           // ofSetColor(100*fftSmoothed[3]);
+           
             //FADE IN
             
             lerpAmt += (lerpTarget - lerpAmt)/100;
             
-           // lerpAmt = (lerpAmt + onAlpha/255)/2;
 
         }
         else{
-            //DARKER
-           // ofSetHexColor(0x6d592e);
-           // ofSetHexColor(0x000000);
+          
             lerpTarget = 0;//1-onAlpha/255;
             lerpAmt += (lerpTarget - lerpAmt)/5;
 
         }
         
-        //color lerp
-               
-       // lerpAmt += (lerpTarget - lerpAmt)/200;
-      //  targetColor = offColor.getLerped(onColor, lerpAmt);
-        targetColor = offColor.getLerped(onColor, lerpAmt*(onAlpha/255));
-
-        //change brightness based on FFT
-      //  targetColor = ofColor(targetColor[0], targetColor[1], targetColor[2], onAlpha);
-     //   targetColor.setBrightness(onAlpha);
+       
+        float lerpTo = lerpAmt*(onAlpha/255);
+        //make sure we don't go over 1!
+        if(lerpTo > 1)
+            lerpTo = 1;
+        targetColor = offColor.getLerped(onColor, lerpTo );
         ofSetColor(targetColor);
 
         
