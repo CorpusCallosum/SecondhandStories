@@ -7,14 +7,14 @@ void testApp::setup(){
     camHeight = 240;
     
     vidGrabber.setVerbose(true);
-    vidGrabber.initGrabber(320,240);
+    vidGrabber.initGrabber(camWidth,240);
 	
 
-    colorImg.allocate(320,240);
-	grayImage.allocate(320,240);
-	grayBg.allocate(320,240);
-	grayDiff.allocate(320,240);
-    grayThresh.allocate(320,240);
+    colorImg.allocate(camWidth,camHeight);
+	grayImage.allocate(camWidth,camHeight);
+	grayBg.allocate(camWidth,camHeight);
+	grayDiff.allocate(camWidth,camHeight);
+    grayThresh.allocate(camWidth,camHeight);
 
     
 	bLearnBakground = true;
@@ -26,12 +26,12 @@ void testApp::setup(){
     fs = false;
     
     //make the objects!!!
-    objectSet.push_back(new smObject("Record",5000, "reed.mp3"));
+    objectSet.push_back(new smObject("Mike",5000, "record.mp3"));
 
    // objectSet.push_back(new smObject("rect",700)); 
    // objectSet.push_back(new smObject("triangle",200));
-    objectSet.push_back(new smObject("Photo",2500, "reed.mp3"));
-    objectSet.push_back(new smObject("China", 300, "reed.mp3"));   
+    objectSet.push_back(new smObject("Merche",2500, "merche.mp3"));
+    objectSet.push_back(new smObject("Gabby", 260, "reed.mp3"));   
 
     
     float xScale = ofGetWidth()/camWidth;
@@ -101,7 +101,9 @@ void testApp::update(){
         
         for( int j=0; j<objectSet.size(); j++ )
         {
-            objectSet[j]->isFound(false);
+          //  objectSet[j]->isFound(false);
+            objectSet[j]->found=false;
+
         }
         
         
@@ -148,16 +150,17 @@ void testApp::update(){
             }
            }
             
-            // (5) grab the fft, and put in into a "smoothed" array,
-            //		by taking maximums, as peaks and then smoothing downward
+            //get incoming nbands
             float * val = ofSoundGetSpectrum( objectSet[j]->nBandsToGet);		// request 128 values for fft
             for (int i = 0;i <  objectSet[j]->nBandsToGet; i++){
                 
-                // let the smoothed calue sink to zero:
-                 objectSet[j]->fftSmoothed[i] *= 0.96f;
+                // map input to alpha value for on color
+                objectSet[j]->onAlpha = ofMap(val[2], 0, .6, 60, 255); 
                 
-                // take the max, either the smoothed or the incoming:
-                if ( objectSet[j]->fftSmoothed[i] < val[i])  objectSet[j]->fftSmoothed[i] = val[i];
+                
+                //printf("fftval: %f\n", val[2]);
+                
+              //  printf("fftval: %d\n", objectSet[j]->onAlpha);
                 
             }
             
@@ -255,8 +258,8 @@ void testApp::drawObjects(){
     blur.begin();
     
 
-    blur.amount = 4;//ofMap(mouseX,0,ofGetWidth(),0,10,true);
-    blur.iterations = 4;//ofMap(mouseY,0,ofGetHeight(),1,10,true);
+    blur.amount = 3;//ofMap(mouseX,0,ofGetWidth(),0,10,true);
+    blur.iterations = 1;//ofMap(mouseY,0,ofGetHeight(),1,10,true);
 
     ofFill();
     ofSetColor(0);

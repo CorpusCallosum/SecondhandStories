@@ -66,7 +66,7 @@ void smObject::setTrackedArea(int _area){
     smoothedTrackedArea = areaSum/areas.size();
     
     //check for change in area
-    if(abs(_area - smoothedTrackedArea) > area*.05){
+    if(abs(_area - smoothedTrackedArea) > area*.04){
         //OBJECT HAS BEEN LIFTED!
         lifted = true;
         

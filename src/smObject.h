@@ -50,7 +50,8 @@ public:
     ofColor             onColor;
     ofColor             targetColor;
     
-    float lerpAmt, lerpTarget;
+    float lerpAmt, lerpTarget, onAlpha;
+    
     
     //METHODS
     void setTrackedArea(int _area);
@@ -61,32 +62,36 @@ public:
     
     void draw(float x=0, float y=0){
         ofFill();
-      /*  if(lifted){
-            lerpTarget = 1;
+        if(lifted){
+            lerpTarget = 1;//onAlpha/255;
             //BRIGHTER
            // ofSetHexColor(0xfdce66);
            // ofSetColor(100*fftSmoothed[3]);
+            //FADE IN
+            
+            lerpAmt += (lerpTarget - lerpAmt)/100;
+            
+           // lerpAmt = (lerpAmt + onAlpha/255)/2;
+
         }
         else{
             //DARKER
            // ofSetHexColor(0x6d592e);
            // ofSetHexColor(0x000000);
-            lerpTarget = 0;
+            lerpTarget = 0;//1-onAlpha/255;
+            lerpAmt += (lerpTarget - lerpAmt)/5;
 
-        }*/
+        }
         
         //color lerp
-        if(!found){
-            //fade glow in
-            lerpAmt += (1 - lerpAmt)/200;
-        }
-        else{
-            //fade glow out
-            lerpAmt += (0 - lerpAmt)/200;
+               
+       // lerpAmt += (lerpTarget - lerpAmt)/200;
+      //  targetColor = offColor.getLerped(onColor, lerpAmt);
+        targetColor = offColor.getLerped(onColor, lerpAmt*(onAlpha/255));
 
-        }
-        printf("lerp amt: %f",lerpAmt);
-        targetColor = offColor.lerp(onColor, lerpAmt);
+        //change brightness based on FFT
+      //  targetColor = ofColor(targetColor[0], targetColor[1], targetColor[2], onAlpha);
+     //   targetColor.setBrightness(onAlpha);
         ofSetColor(targetColor);
 
         
