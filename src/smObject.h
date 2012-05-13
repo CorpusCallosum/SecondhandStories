@@ -100,16 +100,16 @@ public:
             
             //float s = .5;
             
-            pX = pX - (pX-sX)*0;
-            pY = pY - (pY-sY)*0;
+            pX = pX - (pX-sX)*0 + x;
+            pY = pY - (pY-sY)*0 + y;
             
             ofVertex(pX, pY);
         }
         ofEndShape(true);
         
         //Draw text
-        ofSetHexColor(0xffffff);
-        titleFont.drawString(name, 0, 0);
+       // ofSetHexColor(0xffffff);
+       // titleFont.drawString(name, 0, 0);
 
        // titleFont.drawString(name, x-titleFont.stringWidth(name)/2, y);
        // subTitleFont.drawString(name, x, y);

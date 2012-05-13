@@ -21,7 +21,7 @@ void testApp::setup(){
 
     
 	bLearnBakground = true;
-	threshold = 34;
+	threshold = 24;
 
     areaThreshold = .4;
     
@@ -30,12 +30,10 @@ void testApp::setup(){
     
     //make the objects!!!
     objectSet.push_back(new smObject("Mike",5000, "record.mp3"));
-
    // objectSet.push_back(new smObject("rect",700)); 
    // objectSet.push_back(new smObject("triangle",200));
-    objectSet.push_back(new smObject("Merche",2500, "merche.mp3"));
-    objectSet.push_back(new smObject("Spike", 1500, "reed.mp3"));   
-
+    objectSet.push_back(new smObject("Merche",2000, "merche.mp3"));
+   // objectSet.push_back(new smObject("Spike", 1500, "reed.mp3"));   
     objectSet.push_back(new smObject("Gabby", 300, "pitcher.mp3"));
 
     
@@ -48,17 +46,18 @@ void testApp::setup(){
     printf("xScale: %f", xScale);
     printf("yScale: %f", yScale);
 
+    float scale = 3.2;
     
     for( int j=0; j<objectSet.size(); j++ )
     {
-        objectSet[j]->xScale = 3.8;
-        objectSet[j]->yScale = 3.8;
+        objectSet[j]->xScale = scale;
+        objectSet[j]->yScale = scale+.3;
     };
     
     //DEFINE THE FONTS
     //ofTrueTypeFont::setGlobalDpi(72);
     
-	titleFont.loadFont("din.ttf", 20, true, true);
+	titleFont.loadFont("din.ttf", 15, true, true);
 	//titleFont.setLineHeight(34.0f);
 	//titleFont.setLetterSpacing(1.035);
 
@@ -271,9 +270,13 @@ void testApp::drawObjects(){
    // ofRect(0, 0, ofGetWidth()*2, ofGetHeight()*2);
     ofClear(0,255);
     
+    int xOffSet = 50;
+    int yOffSet = -50;
+
+    
     for (int i = 0; i < objectSet.size(); i++){
        // if( objectSet[i]->lifted){            
-            objectSet[i]->draw(0,0);
+            objectSet[i]->draw(xOffSet,-50);
           //  ofSetHexColor(0x000000);
         //}
     }
@@ -286,7 +289,7 @@ void testApp::drawObjects(){
         if( objectSet[i]->lifted){            
             //draw text
             ofSetHexColor(0x000000);
-            titleFont.drawString(objectSet[i]->name, objectSet[i]->x-titleFont.stringWidth(objectSet[i]->name)/2, objectSet[i]->y);
+            titleFont.drawString(objectSet[i]->name, objectSet[i]->x-titleFont.stringWidth(objectSet[i]->name)/2+xOffSet, objectSet[i]->y-50);
         }
         
       /*  if(debug){

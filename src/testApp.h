@@ -30,7 +30,7 @@ class testApp : public ofBaseApp{
         void drawObjects();
 
     
-		  ofVideoGrabber 		vidGrabber;
+        ofVideoGrabber          vidGrabber;
 		
         ofxCvColorImage			colorImg;
 
@@ -38,21 +38,21 @@ class testApp : public ofBaseApp{
 		ofxCvGrayscaleImage 	grayBg;
 		ofxCvGrayscaleImage 	grayDiff, grayThresh;
 
-        ofxCvContourFinder 	contourFinder;
+        ofxCvContourFinder      contourFinder;
 
-		int 				threshold, camWidth, camHeight;
-		bool				bLearnBakground, debug, fs;
+		int                     threshold, camWidth, camHeight;
+		bool                    bLearnBakground, debug, fs;
     
-        float               areaThreshold;
-    
-    //fonts
-    ofTrueTypeFont      titleFont;
+        float                   areaThreshold;
+        
+        //fonts
+        ofTrueTypeFont          titleFont;
 
-    
-    //add a vector of objects here
+        
+        //add a vector of objects here
         std::vector< smObject* >    objectSet;
     
-    ofxBlurShader blur;
+        ofxBlurShader blur;
 
 
 };
