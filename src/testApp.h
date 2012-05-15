@@ -5,6 +5,7 @@
 #include "ofxOpenCv.h"
 #include "smObject.h"
 #include "ofxBlurShader.h"
+#include "opencv2/opencv.hpp"
 
 
 #define _USE_LIVE_VIDEO		// uncomment this to use a live camera

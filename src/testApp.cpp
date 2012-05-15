@@ -21,7 +21,7 @@ void testApp::setup(){
 
     
 	bLearnBakground = true;
-	threshold = 24;
+	threshold = 17;
 
     areaThreshold = .4;
     
@@ -29,12 +29,12 @@ void testApp::setup(){
     fs = false;
     
     //make the objects!!!
-    objectSet.push_back(new smObject("Mike",5000, "record.mp3"));
+    objectSet.push_back(new smObject("Mike",5200, "record.mp3", .5));
    // objectSet.push_back(new smObject("rect",700)); 
    // objectSet.push_back(new smObject("triangle",200));
-    objectSet.push_back(new smObject("Merche",2000, "merche.mp3"));
+    objectSet.push_back(new smObject("Merche",2700, "merche.mp3", 1));
    // objectSet.push_back(new smObject("Spike", 1500, "reed.mp3"));   
-    objectSet.push_back(new smObject("Gabby", 300, "pitcher.mp3"));
+    objectSet.push_back(new smObject("Gabby", 300, "pitcher.mp3", 1));
 
     
     float xScale = ofGetWidth()/camWidth;
@@ -92,11 +92,14 @@ void testApp::update(){
         grayThresh = grayDiff;
         grayThresh.threshold(threshold);
         grayThresh.mirror(false, true);
+        
+        
+       // grayThresh.blurGaussian(20);
 
 
 		// find contours which are between the size of 20 pixels and 1/3 the w*h pixels.
 		// also, find holes is set to true so we will get interior contours as well....
-		contourFinder.findContours(grayThresh, 50, (340*240)/3, 10, false);	// find holes
+		contourFinder.findContours(grayThresh, 50, (340*240)/3, 3, false);	// find holes
 
         float areaDif = camHeight*camWidth;
         
@@ -271,12 +274,12 @@ void testApp::drawObjects(){
     ofClear(0,255);
     
     int xOffSet = 50;
-    int yOffSet = -50;
+    int yOffSet = -30;
 
     
     for (int i = 0; i < objectSet.size(); i++){
        // if( objectSet[i]->lifted){            
-            objectSet[i]->draw(xOffSet,-50);
+            objectSet[i]->draw(xOffSet,yOffSet);
           //  ofSetHexColor(0x000000);
         //}
     }
@@ -289,7 +292,7 @@ void testApp::drawObjects(){
         if( objectSet[i]->lifted){            
             //draw text
             ofSetHexColor(0x000000);
-            titleFont.drawString(objectSet[i]->name, objectSet[i]->x-titleFont.stringWidth(objectSet[i]->name)/2+xOffSet, objectSet[i]->y-50);
+            titleFont.drawString(objectSet[i]->name, objectSet[i]->x-titleFont.stringWidth(objectSet[i]->name)/2+xOffSet, objectSet[i]->y+yOffSet);
         }
         
       /*  if(debug){

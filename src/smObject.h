@@ -21,7 +21,7 @@ public:
     
    // void draw(float x, float y);
     
-    smObject( std::string _NAME, int _AREA, std::string _soundFile);
+    smObject( std::string _NAME, int _AREA, std::string _soundFile, float vol);
         
     int             area;
     std::string     name;
@@ -67,14 +67,14 @@ public:
            
             //FADE IN
             
-            lerpAmt += (lerpTarget - lerpAmt)/100;
+            lerpAmt += (lerpTarget - lerpAmt)/50;
             
 
         }
         else{
           
             lerpTarget = 0;//1-onAlpha/255;
-            lerpAmt += (lerpTarget - lerpAmt)/5;
+            lerpAmt += (lerpTarget - lerpAmt)/10;
 
         }
         
